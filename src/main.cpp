@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 #include "figure_array.h"
 #include "trapezoid.h"
 #include "rhombus.h"
@@ -10,68 +9,72 @@ void print_menu() {
     std::cout << "1. Add Trapezoid\n";
     std::cout << "2. Add Rhombus\n";
     std::cout << "3. Add Pentagon\n";
-    std::cout << "4. Print all figures info\n";
-    std::cout << "5. Get total area\n";
-    std::cout << "6. Delete figure by index\n";
+    std::cout << "4. Show all figures\n";
+    std::cout << "5. Calculate total area\n";
+    std::cout << "6. Delete a figure\n";
     std::cout << "0. Exit\n";
-    std::cout << "Your choice: ";
+    std::cout << "Enter your choice: ";
 }
 
 int main() {
     FigureArray figures;
-    int choice = -1;
+    int command = -1;
+    bool is_running = true;
 
-    while (choice != 0) {
+    while (is_running) {
         print_menu();
-        std::cin >> choice;
+        std::cin >> command;
 
-        if (choice == 1) {
-            Figure* new_figure = new Trapezoid();
-            std::cout << "Enter 4 vertices for Trapezoid in (x,y) format:\n";
-            std::cin >> *new_figure;
-            figures.addFigure(new_figure);
-        } else if (choice == 2) {
-            Figure* new_figure = new Rhombus();
-            std::cout << "Enter 4 vertices for Rhombus in (x,y) format:\n";
-            std::cin >> *new_figure;
-            figures.addFigure(new_figure);
-        } else if (choice == 3) {
-            Figure* new_figure = new Pentagon();
-            std::cout << "Enter 5 vertices for Pentagon in (x,y) format:\n";
-            std::cin >> *new_figure;
-            figures.addFigure(new_figure);
-        } else if (choice == 4) {
-            if (figures.getSize() == 0) {
-                std::cout << "Array is empty.\n";
+        if (command == 1) {
+            Figure* new_fig = new Trapezoid();
+            std::cout << "Enter 4 vertices for the Trapezoid in (x,y) format:\n";
+            std::cin >> *new_fig;
+            figures.add(new_fig);
+        } else if (command == 2) {
+            Figure* new_fig = new Rhombus();
+            std::cout << "Enter 4 vertices for the Rhombus in (x,y) format:\n";
+            std::cin >> *new_fig;
+            figures.add(new_fig);
+        } else if (command == 3) {
+            Figure* new_fig = new Pentagon();
+            std::cout << "Enter 5 vertices for the Pentagon in (x,y) format:\n";
+            std::cin >> *new_fig;
+            figures.add(new_fig);
+        } else if (command == 4) {
+            std::cout << "\n--- List of Figures ---\n";
+            if (figures.size() == 0) {
+                std::cout << "The list is empty.\n";
             }
-            for (size_t i = 0; i < figures.getSize(); ++i) {
-                std::cout << "\n--- Figure " << i << " ---\n";
-                std::cout << "Vertices: " << *figures.get(i) << '\n';
-                Point center = figures.get(i)->calculateGeometricCenter();
-                std::cout << "Center: " << center << '\n';
-                std::cout << "Area: " << (double)(*figures.get(i)) << '\n';
+            for (size_t i = 0; i < figures.size(); ++i) {
+                Figure* fig = figures.get(i);
+                std::cout << "Figure #" << i << std::endl;
+                std::cout << "  Vertices: " << *fig << std::endl;
+                std::cout << "  Center: " << fig->calculateGeometricCenter() << std::endl;
+                std::cout << "  Area: " << (double)(*fig) << std::endl;
             }
-        } else if (choice == 5) {
-            std::cout << "Total area: " << figures.calculateTotalArea() << '\n';
-        } else if (choice == 6) {
-            if (figures.getSize() == 0) {
-                std::cout << "Array is empty.\n";
-                continue;
+        } else if (command == 5) {
+            double total_area = 0;
+            for (size_t i = 0; i < figures.size(); ++i) {
+                total_area += (double)(*figures.get(i));
             }
+            std::cout << "Total area of all figures: " << total_area << std::endl;
+        } else if (command == 6) {
             size_t index;
-            std::cout << "Enter index to delete: ";
+            std::cout << "Enter figure index to delete: ";
             std::cin >> index;
-            if (index >= figures.getSize()) {
-                std::cout << "Error: invalid index.\n";
+            if (index < figures.size()) {
+                figures.remove(index);
+                std::cout << "Figure was deleted.\n";
             } else {
-                figures.removeFigure(index);
-                std::cout << "Figure deleted.\n";
+                std::cout << "Invalid index.\n";
             }
-        } else if (choice != 0) {
-            std::cout << "Wrong command, try again.\n";
+        } else if (command == 0) {
+            is_running = false;
+        } else {
+            std::cout << "Unknown command.\n";
         }
     }
 
-    std::cout << "Exiting.\n";
+    std::cout << "Exiting program.\n";
     return 0;
 }

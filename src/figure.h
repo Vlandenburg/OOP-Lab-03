@@ -4,9 +4,10 @@
 
 class Figure {
 public:
-    virtual ~Figure() = default;
+    virtual ~Figure() {}
 
     virtual Point calculateGeometricCenter() const = 0;
+    virtual double calculateArea() const = 0;
     virtual operator double() const = 0;
 
     virtual void print(std::ostream& os) const = 0;

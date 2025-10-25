@@ -1,70 +1,63 @@
 #pragma once
 #include "figure.h"
 #include <cstddef>
-#include <stdexcept>
 
 class FigureArray {
 public:
     FigureArray() {
-        size_ = 0;
-        capacity_ = 10;
-        data_ = new Figure*[capacity_];
+        count = 0;
+        capacity = 8;
+        arr = new Figure*[capacity];
     }
 
     ~FigureArray() {
-        for (size_t i = 0; i < size_; ++i) {
-            delete data_[i];
+        for (size_t i = 0; i < count; ++i) {
+            delete arr[i];
         }
-        delete[] data_;
+        delete[] arr;
     }
 
-    void addFigure(Figure* fig) {
-        if (size_ == capacity_) {
-            capacity_ *= 2;
-            Figure** new_data = new Figure*[capacity_];
-            for (size_t i = 0; i < size_; ++i) {
-                new_data[i] = data_[i];
+    void add(Figure* fig) {
+        if (count == capacity) {
+            size_t new_capacity = capacity * 2;
+            Figure** new_arr = new Figure*[new_capacity];
+            for (size_t i = 0; i < count; ++i) {
+                new_arr[i] = arr[i];
             }
-            delete[] data_;
-            data_ = new_data;
+            delete[] arr;
+            arr = new_arr;
+            capacity = new_capacity;
         }
-        data_[size_++] = fig;
+        arr[count] = fig;
+        count++;
     }
 
-    void removeFigure(size_t index) {
-        if (index >= size_) {
+    void remove(size_t index) {
+        if (index >= count) {
             return;
         }
-        delete data_[index];
-        for (size_t i = index; i < size_ - 1; ++i) {
-            data_[i] = data_[i + 1];
+        delete arr[index];
+        for (size_t i = index; i < count - 1; ++i) {
+            arr[i] = arr[i + 1];
         }
-        --size_;
+        count--;
     }
 
-    size_t getSize() const {
-        return size_;
+    size_t size() const {
+        return count;
     }
 
     Figure* get(size_t index) const {
-        if (index >= size_) {
-            throw std::out_of_range("Index out of range");
+        if (index >= count) {
+            return nullptr;
         }
-        return data_[index];
-    }
-
-    double calculateTotalArea() const {
-        double total = 0.0;
-        for (size_t i = 0; i < size_; ++i) {
-            total += (double)(*data_[i]);
-        }
-        return total;
+        return arr[index];
     }
 
 private:
-    Figure** data_;
-    size_t size_;
-    size_t capacity_;
+    Figure** arr;
+    size_t count;
+    size_t capacity;
 
     FigureArray(const FigureArray&) = delete;
     FigureArray& operator=(const FigureArray&) = delete;

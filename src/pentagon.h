@@ -4,21 +4,22 @@
 
 class Pentagon : public Figure {
 public:
-    Pentagon() = default;
+    Pentagon();
     Pentagon(const std::array<Point, 5>& vertices);
 
-    Point calculateGeometricCenter() const override;
-    operator double() const override;
-    void print(std::ostream& os) const override;
-    void read(std::istream& is) override;
+    Point calculateGeometricCenter() const;
+    double calculateArea() const;
+    operator double() const;
+    void print(std::ostream& os) const;
+    void read(std::istream& is);
 
     Pentagon(const Pentagon& other);
     Pentagon& operator=(const Pentagon& other);
-    Pentagon(Pentagon&& other) noexcept;
-    Pentagon& operator=(Pentagon&& other) noexcept;
+    Pentagon(Pentagon&& other);
+    Pentagon& operator=(Pentagon&& other);
 
     bool operator==(const Pentagon& other) const;
 
 private:
-    std::array<Point, 5> vertices_{};
+    std::array<Point, 5> vertices;
 };

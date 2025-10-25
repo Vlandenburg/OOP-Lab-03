@@ -4,21 +4,22 @@
 
 class Rhombus : public Figure {
 public:
-    Rhombus() = default;
+    Rhombus();
     Rhombus(const std::array<Point, 4>& vertices);
 
-    Point calculateGeometricCenter() const override;
-    operator double() const override;
-    void print(std::ostream& os) const override;
-    void read(std::istream& is) override;
+    Point calculateGeometricCenter() const;
+    double calculateArea() const;
+    operator double() const;
+    void print(std::ostream& os) const;
+    void read(std::istream& is);
 
     Rhombus(const Rhombus& other);
     Rhombus& operator=(const Rhombus& other);
-    Rhombus(Rhombus&& other) noexcept;
-    Rhombus& operator=(Rhombus&& other) noexcept;
+    Rhombus(Rhombus&& other);
+    Rhombus& operator=(Rhombus&& other);
 
     bool operator==(const Rhombus& other) const;
 
 private:
-    std::array<Point, 4> vertices_{};
+    std::array<Point, 4> vertices;
 };
